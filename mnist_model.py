@@ -13,7 +13,7 @@ input_shape = (28,28,1)
 #Making the values floats so that we can get decimal points after division
 trainX = trainX.astype('float32')
 testX = testX.astype('float32')
-#Normalizing the RGB codes bij dividing it to the max RGB value
+#Normalizing the RGB codes by dividing it to the max RGB value
 trainX /= 255
 testX /= 255
 #Creating a Sequential Model and adding the layers for the network
@@ -33,7 +33,7 @@ model.fit(x=trainX, y=trainY, epochs=10)
 model.evaluate(testX,testY)
 model.save('model.h5')
 
-image_index = 4444
+image_index = 129
 plt.imshow(testX[image_index].reshape(28, 28))
 plt.show()
 pred2 = model.predict(testX[image_index].reshape(1, 28, 28, 1))
