@@ -36,7 +36,10 @@ class Transform:
         return img
 
     def numberTransform(self, img):
-        # TODO Comments for most steps, not everything is clear
+        #TODO Comments for most steps, not everything is clear
+        # Make the image black and white
+        img = self.cv2.cvtColor(img, self.cv2.COLOR_BGR2GRAY)
+
         img = self.cv2.resize(255-img, (28,28), interpolation=self.cv2.INTER_AREA)
         (thresh, img) = self.cv2.threshold(img, 130, 255, self.cv2.THRESH_BINARY | self.cv2.THRESH_OTSU)
         img = self.center(img)
@@ -53,22 +56,23 @@ class Transform:
             cols = 20
             rows = int(round(rows*factor))
             img = self.cv2.resize(img, (cols,rows))
-
+        
         #Adding the missing rows and columns with the np.lib.pad function to get a 28x28 picture
         colsPadding = (int(self.math.ceil((28-cols)/2.0)),int(self.math.floor((28-cols)/2.0)))
         rowsPadding = (int(self.math.ceil((28-rows)/2.0)),int(self.math.floor((28-rows)/2.0)))
         img = self.np.lib.pad(img,(rowsPadding,colsPadding), 'constant')
-
+        
         #getting the center of mass
         shiftx,shifty = self.getBestShift(img)
+        
         #shifting the image in the given directions
         shifted = self.shift(img,shiftx,shifty)
         img = shifted
 
+        #making sure the image can have decimal points
         img = img.astype('float32')
         #Same as in the model reshape the image and divide it by 255
         img = img.reshape(1, 28, 28, 1)
         img /= 255
-
         # Image has been prepared!
         return img
